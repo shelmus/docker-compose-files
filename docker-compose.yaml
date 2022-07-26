@@ -1,0 +1,100 @@
+---
+version: '3'
+services:
+  endorcraft:
+    image: itzg/minecraft-bedrock-server
+    restart: always
+    environment:
+      EULA: "TRUE"
+      GAMEMODE: survival
+      DIFFICULTY: easy
+      SERVER_NAME: "endorcraft"
+      ONLINE_MODE: "true"
+      WHITE_LIST: "false"
+      ALLOW_CHEATS: "true"
+    ports:
+      - 19132:19132/udp
+    volumes:
+      - /opt/minecraft/endorcraft:/data
+    stdin_open: true
+    tty: true
+
+  awesomemc:
+    image: itzg/minecraft-bedrock-server
+    restart: always
+    environment:
+      EULA: "TRUE"
+      GAMEMODE: survival
+      DIFFICULTY: normal
+      SERVER_NAME: "awesome"
+      ONLINE_MODE: "true"
+      WHITE_LIST: "false"
+      ALLOW_CHEATS: "false"
+      VERSION: latest
+    networks:
+      macvlan1:
+        ipv4_address: 10.0.0.51
+    volumes:
+      - /opt/minecraft/awesomemc:/data
+    stdin_open: true
+    tty: true
+
+  goodluck:
+    image: itzg/minecraft-bedrock-server
+    restart: always
+    environment:
+      EULA: "TRUE"
+      GAMEMODE: survival
+      DIFFICULTY: normal
+      SERVER_NAME: "goodluck"
+      ONLINE_MODE: "false"
+      WHITE_LIST: "false"
+      ALLOW_CHEATS: "false"
+      VERSION: latest
+    networks:
+      macvlan1:
+        ipv4_address: 10.0.0.52
+    volumes:
+      - /opt/minecraft/goodluck:/data
+    stdin_open: true
+    tty: true
+
+  mealie:
+    container_name: mealie
+    image: hkotel/mealie:latest
+    restart: always
+    ports:
+      - 9925:80
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/New_York
+
+      # Default Recipe Settings
+      RECIPE_PUBLIC: 'true'
+      RECIPE_SHOW_NUTRITION: 'true'
+      RECIPE_SHOW_ASSETS: 'true'
+      RECIPE_LANDSCAPE_VIEW: 'true'
+      RECIPE_DISABLE_COMMENTS: 'false'
+      RECIPE_DISABLE_AMOUNT: 'false'
+
+      # Gunicorn
+      # WEB_CONCURRENCY: 2
+      # WORKERS_PER_CORE: 0.5
+      # MAX_WORKERS: 8
+    volumes:
+      - /opt/mealie/data/:/app/data
+
+volumes:
+  bds: {}
+  ezrimc: {}
+  mealie: {}
+
+networks:
+  macvlan1:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: 10.0.0.0/23
