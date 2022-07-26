@@ -2,6 +2,7 @@
 version: '3'
 services:
   endorcraft:
+    container_name: endorcraft
     image: itzg/minecraft-bedrock-server
     restart: always
     environment:
@@ -20,6 +21,7 @@ services:
     tty: true
 
   awesomemc:
+    container_name: awesomemc
     image: itzg/minecraft-bedrock-server
     restart: always
     environment:
@@ -40,6 +42,7 @@ services:
     tty: true
 
   goodluck:
+    container_name: goodluck
     image: itzg/minecraft-bedrock-server
     restart: always
     environment:
